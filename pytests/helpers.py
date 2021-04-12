@@ -60,10 +60,43 @@ def calc_tez_out(res, token_amount):
     tez_out = abs(tez_pool - new_tez_pool)
     return tez_out
 
-def parse_transaction(res):
-    dest = res.operations[0]["destination"]
-    amount = int(res.operations[0]["amount"])
-    return (dest, amount) 
+def parse_tez_transfer(op):
+    dest = op["destination"]
+    amount = int(op["amount"])
+    return {
+        "type": "tez", 
+        "destination": dest,
+        "amount": amount
+    }
+
+def parse_token_transfer(op):
+    value = op["parameters"]["value"][0]
+    args = value["args"][1][0]["args"]
+    
+    amount = args[-1]["int"]
+    amount = int(amount)
+   
+    dest = args[0]["string"]
+   
+    return {
+        "type": "token", 
+        "destination": dest,
+        "amount": amount
+    }
+
+def parse_ops(res):
+    result = []
+    for op in res.operations:
+        if op["kind"] == "transaction":
+            if op["parameters"]["entrypoint"] == "default":
+                tx = parse_tez_transfer(op)
+                result.append(tx)
+            else:
+                tx = parse_token_transfer(op)
+                result.append(tx)
+
+    return result
+
 
 
 class LocalChain():
@@ -72,7 +105,6 @@ class LocalChain():
     now = pytezos.now()
     def execute(self, call, amount):
         self.balance += amount
-        print("balance", self.balance)
         res = call.interpret(amount=amount, storage=self.storage, balance=self.balance, now=self.now)
         self.storage = res.storage
         return res

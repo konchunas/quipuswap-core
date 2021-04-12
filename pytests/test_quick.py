@@ -40,15 +40,15 @@ class DexTest(TestCase):
         with self.assertRaises(MichelsonRuntimeError):
             res = self.dex.initializeExchange(0).interpret(amount=1)
 
-    def test_invest(self):
+    def test_fail_invest_not_init(self):
         with self.assertRaises(MichelsonRuntimeError):
             res = self.dex.investLiquidity(30).interpret(amount=1)
 
-    def test_divest(self):
+    def test_fail_divest_not_init(self):
         with self.assertRaises(MichelsonRuntimeError):
             res = self.dex.divestLiquidity(10, 20, 30).interpret(amount=1)
 
-    def test_swap_on_not_launched(self):
+    def test_swap_not_init(self):
         with self.assertRaises(MichelsonRuntimeError):
             res = self.dex.tokenToTezPayment(amount=10, min_out=20, receiver="tz1MDhGTfMQjtMYFXeasKzRWzkQKPtXEkSEw").interpret(amount=1)
         
@@ -66,21 +66,41 @@ class DexTest(TestCase):
 
         res = chain.execute(self.dex.withdrawProfit(my_address), amount=0)
         print(res.operations)
-        (_, firstProfit) = parse_transaction(res)
+        (_, firstProfit) = parse_tez_transfer(res)
 
         chain.advance_time()
 
         res = chain.execute(self.dex.withdrawProfit(my_address), amount=0)
         print(res.operations)
-        (_, secondProfit) = parse_transaction(res)
+        (_, secondProfit) = parse_tez_transfer(res)
+
+        # print("balance expr", self.dex.context.get_amount_expr())
 
         # TODO it is actually super close to 12
         self.assertEqual(firstProfit+secondProfit, 11)
 
         print(chain.storage)
 
+    def test_divest_everything(self):
+        chain = LocalChain()
+        res = chain.execute(self.dex.initializeExchange(100000), amount=100000)
 
-    
+        res = chain.execute(self.dex.divestLiquidity(min_tez=100000, min_tokens=100000, shares=100000), amount=0)
 
+        print(res.operations)
+
+    def test_divest_everything(self):
+        chain = LocalChain()
+        res = chain.execute(self.dex.initializeExchange(100000), amount=100000)
+
+        res = chain.execute(self.dex.divestLiquidity(min_tez=100000, min_tokens=100000, shares=100000), amount=0)
+
+        print(res.operations)
+        ops = parse_ops(res)
+        print(ops)
+        # param = parse_token_transfer(res)
+        # print(param)
+
+        # self.assertEqual(
 
     
