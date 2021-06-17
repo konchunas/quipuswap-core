@@ -1,0 +1,331 @@
+{ parameter
+    (or (or (or (address %allow) (pair %invest (pair nat nat) (pair nat address)))
+            (or (address %setQuipuswapAddress)
+                (list %transfer
+                   (pair (address %from_)
+                         (list %txs (pair (address %to_) (pair (nat %token_id) (nat %amount))))))))
+        (nat %withdraw)) ;
+  storage
+    (pair (pair (bool %is_evil) (address %quipuswap_address))
+          (pair (nat %shares_to_divest) (address %victim_address))) ;
+  code { LAMBDA
+           address
+           (contract
+              (or (or (or (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                                (pair nat (pair nat nat)))
+                          (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                                (pair nat nat)))
+                      (or (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                                (pair nat nat))
+                          (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                                (pair (or unit unit) (pair nat (pair nat address))))))
+                  (pair (list (pair (or unit unit)
+                                    (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))))
+                        (pair nat (pair nat address)))))
+           { CONTRACT %use
+               (or (or (or (pair %divestLiquidity
+                              (pair %pair
+                                 (pair (pair (address %token_a_address) (nat %token_a_id))
+                                       (pair (or %token_a_type (unit %fa12) (unit %fa2)) (address %token_b_address)))
+                                 (pair (nat %token_b_id) (or %token_b_type (unit %fa12) (unit %fa2))))
+                              (pair (nat %min_token_a_out) (pair (nat %min_token_b_out) (nat %shares))))
+                           (pair %initializeExchange
+                              (pair %pair
+                                 (pair (pair (address %token_a_address) (nat %token_a_id))
+                                       (pair (or %token_a_type (unit %fa12) (unit %fa2)) (address %token_b_address)))
+                                 (pair (nat %token_b_id) (or %token_b_type (unit %fa12) (unit %fa2))))
+                              (pair (nat %token_a_in) (nat %token_b_in))))
+                       (or (pair %investLiquidity
+                              (pair %pair
+                                 (pair (pair (address %token_a_address) (nat %token_a_id))
+                                       (pair (or %token_a_type (unit %fa12) (unit %fa2)) (address %token_b_address)))
+                                 (pair (nat %token_b_id) (or %token_b_type (unit %fa12) (unit %fa2))))
+                              (pair (nat %token_a_in) (nat %token_b_in)))
+                           (pair %tokenToTokenPayment
+                              (pair %pair
+                                 (pair (pair (address %token_a_address) (nat %token_a_id))
+                                       (pair (or %token_a_type (unit %fa12) (unit %fa2)) (address %token_b_address)))
+                                 (pair (nat %token_b_id) (or %token_b_type (unit %fa12) (unit %fa2))))
+                              (pair (or %operation (unit %buy) (unit %sell))
+                                    (pair (nat %amount_in) (pair (nat %min_amount_out) (address %receiver)))))))
+                   (pair %tokenToTokenRoutePayment
+                      (list %swaps
+                         (pair (or %operation (unit %buy) (unit %sell))
+                               (pair %pair
+                                  (pair (pair (address %token_a_address) (nat %token_a_id))
+                                        (pair (or %token_a_type (unit %fa12) (unit %fa2)) (address %token_b_address)))
+                                  (pair (nat %token_b_id) (or %token_b_type (unit %fa12) (unit %fa2))))))
+                      (pair (nat %amount_in) (pair (nat %min_amount_out) (address %receiver))))) ;
+             IF_NONE
+               { PUSH string "Common/qp-pool-use-entrypoint-not-found" ; FAILWITH }
+               {} } ;
+         SWAP ;
+         UNPAIR ;
+         IF_LEFT
+           { IF_LEFT
+               { IF_LEFT
+                   { DIG 2 ;
+                     DROP ;
+                     CONTRACT %update_operators
+                       (list (or (pair %add_operator (address %owner) (pair (address %operator) (nat %token_id)))
+                                 (pair %remove_operator (address %owner) (pair (address %operator) (nat %token_id))))) ;
+                     IF_NONE { PUSH string "not-a-fa2-token" ; FAILWITH } {} ;
+                     PUSH mutez 0 ;
+                     NIL (or (pair address (pair address nat)) (pair address (pair address nat))) ;
+                     PUSH nat 0 ;
+                     DUP 5 ;
+                     CAR ;
+                     CDR ;
+                     PAIR ;
+                     SELF_ADDRESS ;
+                     PAIR ;
+                     LEFT (pair address (pair address nat)) ;
+                     CONS ;
+                     TRANSFER_TOKENS ;
+                     SWAP ;
+                     NIL operation ;
+                     DIG 2 ;
+                     CONS ;
+                     PAIR }
+                   { SWAP ;
+                     DUP ;
+                     DUG 2 ;
+                     CDR ;
+                     DIG 2 ;
+                     CAR ;
+                     CDR ;
+                     PUSH bool True ;
+                     PAIR ;
+                     PAIR ;
+                     DUP ;
+                     CDR ;
+                     CDR ;
+                     DUP 3 ;
+                     CDR ;
+                     CAR ;
+                     PAIR ;
+                     SWAP ;
+                     CAR ;
+                     PAIR ;
+                     SWAP ;
+                     DUP ;
+                     DUG 2 ;
+                     CDR ;
+                     CDR ;
+                     SWAP ;
+                     DUP ;
+                     DUG 2 ;
+                     CDR ;
+                     CAR ;
+                     PAIR ;
+                     SWAP ;
+                     CAR ;
+                     PAIR ;
+                     PUSH unit Unit ;
+                     RIGHT unit ;
+                     PUSH nat 0 ;
+                     PAIR ;
+                     SELF_ADDRESS ;
+                     PUSH unit Unit ;
+                     RIGHT unit ;
+                     PAIR ;
+                     PUSH nat 0 ;
+                     DUP 4 ;
+                     CDR ;
+                     CDR ;
+                     PAIR ;
+                     PAIR ;
+                     PAIR ;
+                     SWAP ;
+                     DUP ;
+                     DUG 2 ;
+                     CAR ;
+                     CDR ;
+                     DIG 4 ;
+                     SWAP ;
+                     EXEC ;
+                     PUSH mutez 0 ;
+                     DUP 5 ;
+                     CAR ;
+                     CDR ;
+                     DIG 5 ;
+                     CAR ;
+                     CAR ;
+                     PAIR ;
+                     DIG 3 ;
+                     PAIR ;
+                     LEFT (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                                (pair (or unit unit) (pair nat (pair nat address)))) ;
+                     RIGHT
+                       (or (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                                 (pair nat (pair nat nat)))
+                           (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                                 (pair nat nat))) ;
+                     LEFT (pair (list (pair (or unit unit)
+                                            (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))))
+                                (pair nat (pair nat address))) ;
+                     TRANSFER_TOKENS ;
+                     SWAP ;
+                     NIL operation ;
+                     DIG 2 ;
+                     CONS ;
+                     PAIR } }
+               { IF_LEFT
+                   { DIG 2 ;
+                     DROP ;
+                     SWAP ;
+                     DUP ;
+                     DUG 2 ;
+                     CDR ;
+                     SWAP ;
+                     DIG 2 ;
+                     CAR ;
+                     CAR ;
+                     PAIR ;
+                     PAIR ;
+                     NIL operation ;
+                     PAIR }
+                   { NIL operation ;
+                     PUSH bool True ;
+                     DUP 4 ;
+                     CAR ;
+                     CAR ;
+                     COMPARE ;
+                     EQ ;
+                     IF { SWAP ;
+                          IF_CONS
+                            { SWAP ; DROP ; SOME }
+                            { NONE (pair address (list (pair address (pair nat nat)))) } ;
+                          IF_NONE { PUSH string "t1" ; FAILWITH } {} ;
+                          CDR ;
+                          IF_CONS { SWAP ; DROP ; SOME } { NONE (pair address (pair nat nat)) } ;
+                          IF_NONE { PUSH string "t2" ; FAILWITH } { DROP } ;
+                          PUSH unit Unit ;
+                          RIGHT unit ;
+                          PUSH nat 0 ;
+                          PAIR ;
+                          SELF_ADDRESS ;
+                          PUSH unit Unit ;
+                          RIGHT unit ;
+                          PAIR ;
+                          PUSH nat 0 ;
+                          DUP 5 ;
+                          CDR ;
+                          CDR ;
+                          PAIR ;
+                          PAIR ;
+                          PAIR ;
+                          DUP 3 ;
+                          CAR ;
+                          CDR ;
+                          DIG 4 ;
+                          SWAP ;
+                          EXEC ;
+                          PUSH mutez 0 ;
+                          DUP 5 ;
+                          CDR ;
+                          CAR ;
+                          PUSH nat 1 ;
+                          PAIR ;
+                          PUSH nat 1 ;
+                          PAIR ;
+                          DIG 3 ;
+                          PAIR ;
+                          LEFT (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                                     (pair nat nat)) ;
+                          LEFT (or (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                                         (pair nat nat))
+                                   (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                                         (pair (or unit unit) (pair nat (pair nat address))))) ;
+                          LEFT (pair (list (pair (or unit unit)
+                                                 (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))))
+                                     (pair nat (pair nat address))) ;
+                          TRANSFER_TOKENS ;
+                          DUP 3 ;
+                          CDR ;
+                          DIG 3 ;
+                          CAR ;
+                          CDR ;
+                          PUSH bool False ;
+                          PAIR ;
+                          PAIR ;
+                          DUG 2 ;
+                          CONS ;
+                          PAIR }
+                        { SWAP ; DROP ; DIG 2 ; DROP ; PAIR } } } }
+           { DROP ;
+             PUSH unit Unit ;
+             RIGHT unit ;
+             PUSH nat 0 ;
+             PAIR ;
+             SELF_ADDRESS ;
+             PUSH unit Unit ;
+             RIGHT unit ;
+             PAIR ;
+             PUSH nat 0 ;
+             DUP 4 ;
+             CDR ;
+             CDR ;
+             PAIR ;
+             PAIR ;
+             PAIR ;
+             SWAP ;
+             DUP ;
+             DUG 2 ;
+             CAR ;
+             CDR ;
+             DIG 3 ;
+             SWAP ;
+             EXEC ;
+             PUSH mutez 0 ;
+             DUP 4 ;
+             CDR ;
+             CAR ;
+             PUSH nat 1 ;
+             PAIR ;
+             PUSH nat 1 ;
+             PAIR ;
+             DIG 3 ;
+             PAIR ;
+             LEFT (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                        (pair nat nat)) ;
+             LEFT (or (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                            (pair nat nat))
+                      (pair (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))
+                            (pair (or unit unit) (pair nat (pair nat address))))) ;
+             LEFT (pair (list (pair (or unit unit)
+                                    (pair (pair (pair address nat) (pair (or unit unit) address)) (pair nat (or unit unit)))))
+                        (pair nat (pair nat address))) ;
+             TRANSFER_TOKENS ;
+             SWAP ;
+             DUP ;
+             DUG 2 ;
+             CDR ;
+             CDR ;
+             CONTRACT %transfer
+               (list (pair (address %from_)
+                           (list %txs (pair (address %to_) (pair (nat %token_id) (nat %amount)))))) ;
+             IF_NONE { PUSH string "not-a-fa2-token" ; FAILWITH } {} ;
+             PUSH mutez 0 ;
+             NIL (pair address (list (pair address (pair nat nat)))) ;
+             NIL (pair address (pair nat nat)) ;
+             DUP 6 ;
+             CDR ;
+             CAR ;
+             PUSH nat 0 ;
+             PAIR ;
+             PUSH address "tz1MDhGTfMQjtMYFXeasKzRWzkQKPtXEkSEw" ;
+             PAIR ;
+             CONS ;
+             SELF_ADDRESS ;
+             PAIR ;
+             CONS ;
+             TRANSFER_TOKENS ;
+             DIG 2 ;
+             NIL operation ;
+             DIG 2 ;
+             CONS ;
+             DIG 2 ;
+             CONS ;
+             PAIR } } }
+

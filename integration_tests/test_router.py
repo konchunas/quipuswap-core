@@ -6,6 +6,14 @@ from helpers import *
 from pytezos import ContractInterface, pytezos, MichelsonRuntimeError
 from pytezos.context.mixin import ExecutionContext
 
+pair = {
+    "token_a_address" : "KT1PgHxzUXruWG5XAahQzJAjkk4c2sPcM3Ca",
+    "token_a_id" : 0,
+    "token_b_address" : "KT1Wz32jY2WEwWq8ZaA2C6cYFHGchFYVVczC",
+    "token_b_id" : 255,
+    "standard": "fa12"
+}
+
 class TokenToTokenTest(TestCase):
 
     @classmethod
@@ -92,7 +100,30 @@ class TokenToTokenTest(TestCase):
         self.assertEqual(routed_out["amount"], first_out["amount"] + second_out["amount"])
 
     
+    def test_tt_router_equals_to_usual(self):
+        chain = LocalChain(token_to_token=True)
+        res = chain.execute(self.dex.initializeExchange(pair, 1_000, 3_000_000))
+        
+        amount_in=1_000_000
 
+        res = chain.interpret(self.dex.tokenToTokenPayment(pair=pair, operation="buy", amount_in=amount_in, min_amount_out=1, receiver=julian))
+        non_routed_transfers = parse_token_transfers(res)
+
+        # interpret router payment
+        res = chain.interpret(self.dex.tokenToTokenRoutePayment({
+            "swaps" : [
+                {
+                    "pair": pair, 
+                    "operation": "buy",
+                }
+            ],
+            "amount_in" : amount_in,
+            "min_amount_out" : 1, 
+            "receiver" : julian
+        }))
+        through_router_transfers = parse_token_transfers(res)
+
+        self.assertDictEqual(non_routed_transfers, through_router_transfers)
 
     def test_tt_router_impossible_path(self):
         token_a = "KT1PgHxzUXruWG5XAahQzJAjkk4c2sPcM3Ca"

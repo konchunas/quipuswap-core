@@ -1,0 +1,125 @@
+Estimated gas: 264566.034 units (will add 100 for safety)
+Estimated storage: no bytes added
+Operation successfully injected in the node.
+Operation hash is 'oov4nv2277kC9Uxvvxi8s14Muw2hnvAiLfzciTbGpm6WPgE7tWW'
+Waiting for the operation to be included...
+Operation found in block: BMNjDycsftnp4yLMYKVqoEVvcP424A9THx6Ch2ymPUWek4kwE2G (pass: 3, offset: 8)
+This sequence of operations was run:
+  Manager signed operations:
+    From: tz1MDhGTfMQjtMYFXeasKzRWzkQKPtXEkSEw
+    Fee to the baker: ꜩ0.026787
+    Expected counter: 30268
+    Gas limit: 264667
+    Storage limit: 0 bytes
+    Balance updates:
+      tz1MDhGTfMQjtMYFXeasKzRWzkQKPtXEkSEw ............. -ꜩ0.026787
+      fees(tz1VWasoyFGAWZt5K2qZRzP3cWzv3z7MMhP8,131) ... +ꜩ0.026787
+    Transaction:
+      Amount: ꜩ0
+      From: tz1MDhGTfMQjtMYFXeasKzRWzkQKPtXEkSEw
+      To: KT1JD8ZNP4Wq5iW24AKd7BzqHN1fmc5Yh1nN
+      Entrypoint: invest
+      Parameter: (Pair (Pair 300 300) (Pair 300 "KT1VCczKAoRQJKco7NiSaB93PMkYCbL2z1K7"))
+      This transaction was successfully applied
+      Updated storage:
+        (Pair (Pair True 300) 0x01e22a54aec9ab6726ab7cebaeb1acaa592aea4bb800)
+      Storage size: 3039 bytes
+      Consumed gas: 39940.812
+    Internal operations:
+      Transaction:
+        Amount: ꜩ0
+        From: KT1JD8ZNP4Wq5iW24AKd7BzqHN1fmc5Yh1nN
+        To: KT1PgHxzUXruWG5XAahQzJAjkk4c2sPcM3Ca
+        Entrypoint: use
+        Parameter: (Left (Right
+                            (Left { Pair (Pair (Pair (Left (Right Unit)) 0x016999a182736fa220e95b9ebabbd0fb83b7ea865400)
+                                               (Pair 0 0x01e22a54aec9ab6726ab7cebaeb1acaa592aea4bb800))
+                                         0 ;
+                                    300 ;
+                                    300 ;
+                                    0 })))
+        This transaction was successfully applied
+        Updated storage:
+          (Pair (Pair 73074 73075) (Pair (Pair (Pair (Pair 73076 73077) (Pair 7 73078)) 73079) 73080))
+        Updated big_maps:
+          Set map(73077)[6] to (Pair (Pair 400 400) 400)
+          Set map(73076)[(Pair 0x016999a182736fa220e95b9ebabbd0fb83b7ea865400 6)] to (Pair {} 300)
+        Storage size: 31336 bytes
+        Consumed gas: 71467.836
+      Transaction:
+        Amount: ꜩ0
+        From: KT1PgHxzUXruWG5XAahQzJAjkk4c2sPcM3Ca
+        To: KT1JD8ZNP4Wq5iW24AKd7BzqHN1fmc5Yh1nN
+        Entrypoint: transfer
+        Parameter: { Pair 0x016999a182736fa220e95b9ebabbd0fb83b7ea865400
+                          { Pair 0x01a59557f5506c6b4e8f8d5acdec7420a69011781e00 (Pair 0 300) } }
+        This transaction was successfully applied
+        Updated storage:
+          (Pair (Pair False 300) 0x01e22a54aec9ab6726ab7cebaeb1acaa592aea4bb800)
+        Storage size: 3039 bytes
+        Consumed gas: 40079.364
+      Transaction:
+        Amount: ꜩ0
+        From: KT1JD8ZNP4Wq5iW24AKd7BzqHN1fmc5Yh1nN
+        To: KT1PgHxzUXruWG5XAahQzJAjkk4c2sPcM3Ca
+        Entrypoint: use
+        Parameter: (Left (Left (Left { Pair (Pair (Pair (Left (Right Unit)) 0x016999a182736fa220e95b9ebabbd0fb83b7ea865400)
+                                                  (Pair 0 0x01e22a54aec9ab6726ab7cebaeb1acaa592aea4bb800))
+                                            0 ;
+                                       1 ;
+                                       1 ;
+                                       300 })))
+        This transaction was successfully applied
+        Updated storage:
+          (Pair (Pair 73074 73075) (Pair (Pair (Pair (Pair 73076 73077) (Pair 7 73078)) 73079) 73080))
+        Updated big_maps:
+          Set map(73077)[6] to (Pair (Pair 100 100) 100)
+          Set map(73076)[(Pair 0x016999a182736fa220e95b9ebabbd0fb83b7ea865400 6)] to (Pair {} 0)
+        Storage size: 31335 bytes
+        Consumed gas: 70095.112
+      Transaction:
+        Amount: ꜩ0
+        From: KT1PgHxzUXruWG5XAahQzJAjkk4c2sPcM3Ca
+        To: KT1JD8ZNP4Wq5iW24AKd7BzqHN1fmc5Yh1nN
+        Entrypoint: transfer
+        Parameter: { Pair 0x01a59557f5506c6b4e8f8d5acdec7420a69011781e00
+                          { Pair 0x016999a182736fa220e95b9ebabbd0fb83b7ea865400 (Pair 0 300) } }
+        This transaction was successfully applied
+        Updated storage:
+          (Pair (Pair False 300) 0x01e22a54aec9ab6726ab7cebaeb1acaa592aea4bb800)
+        Storage size: 3039 bytes
+        Consumed gas: 14767.260
+      Transaction:
+        Amount: ꜩ0
+        From: KT1PgHxzUXruWG5XAahQzJAjkk4c2sPcM3Ca
+        To: KT1VCczKAoRQJKco7NiSaB93PMkYCbL2z1K7
+        Entrypoint: transfer
+        Parameter: { Pair 0x01a59557f5506c6b4e8f8d5acdec7420a69011781e00
+                          { Pair 0x016999a182736fa220e95b9ebabbd0fb83b7ea865400 (Pair 0 300) } }
+        This transaction was successfully applied
+        Updated storage: (Pair (Pair 18383 18384) (Pair 18385 10000000))
+        Updated big_maps:
+          Set map(18383)[0x016999a182736fa220e95b9ebabbd0fb83b7ea865400] to (Pair { 0x01a59557f5506c6b4e8f8d5acdec7420a69011781e00 } 300)
+          Set map(18383)[0x01a59557f5506c6b4e8f8d5acdec7420a69011781e00] to (Pair {} 400)
+        Storage size: 5623 bytes
+        Consumed gas: 14106.824
+      Transaction:
+        Amount: ꜩ0
+        From: KT1PgHxzUXruWG5XAahQzJAjkk4c2sPcM3Ca
+        To: KT1VCczKAoRQJKco7NiSaB93PMkYCbL2z1K7
+        Entrypoint: transfer
+        Parameter: { Pair 0x016999a182736fa220e95b9ebabbd0fb83b7ea865400
+                          { Pair 0x01a59557f5506c6b4e8f8d5acdec7420a69011781e00 (Pair 0 300) } }
+        This transaction was successfully applied
+        Updated storage: (Pair (Pair 18383 18384) (Pair 18385 10000000))
+        Updated big_maps:
+          Set map(18383)[0x016999a182736fa220e95b9ebabbd0fb83b7ea865400] to (Pair { 0x01a59557f5506c6b4e8f8d5acdec7420a69011781e00 } 0)
+          Set map(18383)[0x01a59557f5506c6b4e8f8d5acdec7420a69011781e00] to (Pair {} 700)
+        Storage size: 5622 bytes
+        Consumed gas: 14108.826
+
+The operation has only been included 0 blocks ago.
+We recommend to wait more.
+Use command
+  tezos-client wait for oov4nv2277kC9Uxvvxi8s14Muw2hnvAiLfzciTbGpm6WPgE7tWW to be included --confirmations 30 --branch BMCSXcsPFKQKmGWdph5Jd69bZnSDt7rSFEJ92bvnXW5aNxCyTWb
+and/or an external block explorer.

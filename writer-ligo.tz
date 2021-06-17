@@ -1,0 +1,26 @@
+{ parameter (or (unit %read) (address %write)) ;
+  storage bool ;
+  code { UNPAIR ;
+         IF_LEFT
+           { DROP ;
+             PUSH bool True ;
+             SWAP ;
+             DUP ;
+             DUG 2 ;
+             COMPARE ;
+             EQ ;
+             IF { PUSH string "State is true" ; FAILWITH }
+                { PUSH string "State is false" ; FAILWITH } }
+           { SWAP ;
+             DROP ;
+             CONTRACT unit ;
+             IF_NONE { PUSH string "cant-get-write-listener" ; FAILWITH } {} ;
+             PUSH mutez 0 ;
+             UNIT ;
+             TRANSFER_TOKENS ;
+             PUSH bool True ;
+             NIL operation ;
+             DIG 2 ;
+             CONS ;
+             PAIR } } }
+
